@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comforty-Contact</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+  </head>
+  <body>
+    <div
+      class="flex items-center justify-between bg-gray-100/70 px-4 md:px-10 py-3"
+    >
+      <div class="flex items-center gap-2">
+        <img src="assets/Logo Icon.png" class="h-6 w-6" />
+        <p class="text-xl md:text-2xl font-medium text-gray-700">Comforty</p>
+      </div>
+      <div class="hidden md:flex items-center space-x-8">
+        <a
+          href="home.html"
+          class="text-sm font-medium text-gray-700 hover:text-teal-600"
+          >Home</a
+        >
+        <a
+          href="shop.html"
+          class="text-sm font-medium text-gray-700 hover:text-teal-600"
+          >Shop</a
+        >
+        <a
+          href="product.html"
+          class="text-sm font-medium text-gray-700 hover:text-teal-600"
+          >Single Product</a
+        >
+        <a
+          href="Cart.html"
+          class="text-sm font-medium text-gray-700 hover:text-teal-600"
+          >Cart</a
+        >
+        <a
+          href="Contact.html"
+          class="text-sm font-medium text-gray-700 hover:text-teal-600"
+          >Contact</a
+        >
+      </div>
+      <div class="flex gap-3">
+        <div class="rounded-lg border-2 border-gray-200 bg-white p-2">
+          <a href="Cart.html" class="p-3 hover:bg-gray-50/50">
+            <button>
+              <div class="flex">
+                <i class="fa-solid fa-cart-arrow-down"></i>
+                <p class="text-xs font-medium">Cart</p>
+              </div>
+            </button>
+          </a>
+        </div>
+        <div class="rounded-lg border-2 border-gray-200 bg-white p-2">
+          <button>
+            <a href="signin.html" class="p-3 hover:bg-gray-50/50">
+              <i class="fa-regular fa-user"></i>
+            </a>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative h-64 sm:h-80 md:h-96 flex items-center justify-center overflow-hidden"
+    >
+      <div class="absolute inset-0">
+        <img
+          src="assets/shop_img.jpg"
+          alt="Shop background image"
+          class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-black/40"></div>
+      </div>
+      <div class="relative z-10 text-white text-center">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">Contact</h1>
+        <p class="text-sm font-light space-x-2">
+          <a href="home.html" class="hover:text-teal-400 transition">Home</a>
+          <i class="fa-solid fa-chevron-right text-xs opacity-70"></i>
+          <span class="font-semibold text-teal-400">Contact</span>
+        </p>
+      </div>
+    </div>
+
+    <section class="py-12 md:py-20 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-12 md:mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Get In Touch With Us
+          </h2>
+          <p class="text-sm text-gray-600 max-w-2xl mx-auto">
+            For More Information About Our Product & Services, Please Feel Free
+            To Drop Us An Email. Our Staff Always Be There To Help You Out, Do
+            Not Hesitate!
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
+          <div class="space-y-8 md:space-y-10">
+            <div class="flex items-start space-x-4">
+              <i
+                class="fa-solid fa-map-marker-alt text-2xl text-gray-700 mt-1 flex-shrink-0"
+              ></i>
+              <div class="animate__animated animate__bounceInLeft">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                  Address
+                </h3>
+                <p class="text-sm text-gray-600 leading-relaxed">
+                  236 5th St Avenue, New York NY10000, United States
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <i
+                class="fa-solid fa-phone text-2xl text-gray-700 mt-1 flex-shrink-0"
+              ></i>
+              <div class="animate__animated animate__bounceInLeft">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">Phone</h3>
+                <p class="text-sm text-gray-600">Mobile: +(84) 546-6789</p>
+                <p class="text-sm text-gray-600">Hotline: +(84) 456-6789</p>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <i
+                class="fa-solid fa-clock text-2xl text-gray-700 mt-1 flex-shrink-0"
+              ></i>
+              <div class="animate__animated animate__bounceInLeft">
+                <h3 class="text-lg font-semibold text-gray-900 mb-1">
+                  Working Time
+                </h3>
+                <p class="text-sm text-gray-600">Monday-Friday: 9:00 - 22:00</p>
+                <p class="text-sm text-gray-600">
+                  Saturday-Sunday: 9:00 - 21:00
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <form action="#" method="POST" class="space-y-6">
+              <div>
+                <label
+                  for="name"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                  >Your name</label
+                >
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Abc"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  for="email"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                  >Email address</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="abc@def.com"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label
+                  for="subject"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                  >Subject</label
+                >
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  placeholder="This is an optional"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="message"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                  >Message</label
+                >
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
+                  placeholder="Hi! I'd like to ask about"
+                  class="w-full p-3 border border-gray-300 rounded-lg focus:ring-teal-500 focus:border-teal-500"
+                  required
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                class="w-full lg:w-48 py-3 bg-teal-500 hover:bg-teal-600 text-white font-semibold rounded-lg transition duration-300 shadow-md"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="bg-gray-100/70 py-10 md:py-16">
+      <div class="container mx-auto px-4 bg-gray-100/70 py-10 md:py-16">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 text-center sm:text-left"
+        >
+          <div
+            class="flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4"
+          >
+            <i
+              class="fa-solid fa-trophy text-4xl text-gray-800 flex-shrink-0"
+            ></i>
+            <div>
+              <h3 class="font-semibold text-gray-800 text-base">
+                High Quality
+              </h3>
+              <p class="text-sm text-gray-500">Crafted from top materials</p>
+            </div>
+          </div>
+          <div
+            class="flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4"
+          >
+            <i
+              class="fa-solid fa-shield-halved text-4xl text-gray-800 flex-shrink-0"
+            ></i>
+            <div>
+              <h3 class="font-semibold text-gray-800 text-base">
+                Warranty Protection
+              </h3>
+              <p class="text-sm text-gray-500">Over 2 years</p>
+            </div>
+          </div>
+          <div
+            class="flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4"
+          >
+            <i class="fa-solid fa-box text-4xl text-gray-800 flex-shrink-0"></i>
+            <div>
+              <h3 class="font-semibold text-gray-800 text-base">
+                Free Shipping
+              </h3>
+              <p class="text-sm text-gray-500">Order over 150 $</p>
+            </div>
+          </div>
+          <div
+            class="flex flex-col sm:flex-row items-center sm:items-start space-y-3 sm:space-y-0 sm:space-x-4"
+          >
+            <i
+              class="fa-solid fa-headset text-4xl text-gray-800 flex-shrink-0"
+            ></i>
+            <div>
+              <h3 class="font-semibold text-gray-800 text-base">
+                24 / 7 Support
+              </h3>
+              <p class="text-sm text-gray-500">Dedicated support</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white pt-16 md:pt-20 border-t border-gray-100">
+      <div class="container mx-auto px-4">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 pb-12 md:pb-16"
+        >
+          <div>
+            <div class="flex items-center gap-2 mb-4">
+              <img src="assets/Logo Icon.png" class="h-6 w-6" />
+              <p class="text-2xl font-medium text-gray-800">Comforty</p>
+            </div>
+            <p class="text-sm text-gray-600 mb-6">
+              Vivamus tristique odio sit amet velit semper, eu posuere turpis
+              interdum. Cras egestas purus.
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 text-gray-600 hover:border-teal-500 hover:text-teal-500 transition duration-300"
+              >
+                <i class="fa-brands fa-facebook-f text-sm"></i>
+              </a>
+              <a
+                href="#"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 text-gray-600 hover:border-teal-500 hover:text-teal-500 transition duration-300"
+              >
+                <i class="fa-brands fa-twitter text-sm"></i>
+              </a>
+              <a
+                href="#"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 text-gray-600 hover:border-teal-500 hover:text-teal-500 transition duration-300"
+              >
+                <i class="fa-brands fa-instagram text-sm"></i>
+              </a>
+              <a
+                href="#"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 text-gray-600 hover:border-teal-500 hover:text-teal-500 transition duration-300"
+              >
+                <i class="fa-brands fa-youtube text-sm"></i>
+              </a>
+              <a
+                href="#"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-400 text-gray-600 hover:border-teal-500 hover:text-teal-500 transition duration-300"
+              >
+                <i class="fa-brands fa-pinterest-p text-sm"></i>
+              </a>
+            </div>
+          </div>
+          <div>
+            <h4
+              class="text-sm font-semibold uppercase tracking-wider text-gray-800 mb-4"
+            >
+              CATEGORY
+            </h4>
+            <ul class="space-y-3 text-sm">
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Sofa</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Armchair</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Wing Chair</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Desk Chair</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Wooden Chair</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Park Bench</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-sm font-semibold uppercase tracking-wider text-gray-800 mb-4"
+            >
+              SUPPORT
+            </h4>
+            <ul class="space-y-3 text-sm">
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Help & Support</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Teams & Conditions</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-600 hover:text-teal-600 transition"
+                  >Help</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4
+              class="text-sm font-semibold uppercase tracking-wider text-gray-800 mb-4"
+            >
+              NEWSLETTER
+            </h4>
+
+            <div class="flex">
+              <input
+                type="email"
+                placeholder="Your email"
+                class="flex-grow p-3 text-sm border border-gray-300 rounded-l-md focus:border-teal-500 focus:ring-teal-500"
+              />
+              <button
+                class="bg-teal-500 hover:bg-teal-600 text-white p-3 text-sm rounded-r-md transition duration-300"
+              >
+                Subscribe
+              </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-4">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+              tincidunt erat enim.
+            </p>
+          </div>
+        </div>
+        <div
+          class="flex flex-col md:flex-row justify-between items-center py-6 border-t border-gray-200"
+        >
+          <p
+            class="text-xs text-gray-500 mb-4 md:mb-0 text-center md:text-left"
+          >
+            © 2021 - Wimpy - Designed & Develop by
+            <span class="font-semibold text-gray-700">tokisoft</span>
+          </p>
+          <div class="flex space-x-2 items-center">
+            <i class="fa-brands fa-cc-mastercard text-2xl text-gray-500"></i>
+            <i class="fa-brands fa-cc-paypal text-2xl text-gray-500"></i>
+            <i class="fa-brands fa-cc-amex text-2xl text-gray-500"></i>
+            <i class="fa-brands fa-cc-visa text-2xl text-gray-500"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
