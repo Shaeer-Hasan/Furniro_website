@@ -110,7 +110,7 @@
             <button class="text-teal-600">
               <i class="fa-solid fa-table-cells-large"></i>
             </button>
-            <span class="pl-4 border-l border-gray-200"
+            <span id="result-count" class="pl-4 border-l border-gray-200"
               >Showing 1-16 of 32 results</span
             >
           </div>
@@ -118,6 +118,7 @@
             <form action="/search" method="GET" class="relative">
               <input
                 type="search"
+                id="shop-search"
                 placeholder="Search here..."
                 name="query"
                 class="w-full py-2.5 pl-5 pr-12 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition duration-150 animate__animated animate__heartBeat"
@@ -146,19 +147,23 @@
               </select>
             </div>
             <div class="flex items-center space-x-2">
-              <label for="sort" class="hidden sm:block">Short by</label>
+              <label for="category-filter" class="hidden sm:block"
+                >Sort By</label
+              >
               <select
-                id="sort"
+                id="category-filter"
                 class="border border-gray-300 rounded-md text-sm p-1.5 focus:ring-teal-500 focus:border-teal-500"
               >
-                <option>Default</option>
-                <option>Price: Low to High</option>
-                <option>Newest</option>
+                <option value="all">All Categories</option>
               </select>
             </div>
           </div>
         </div>
         <div
+          id="shop-container"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+        ></div>
+        <!-- <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
         >
           <div
@@ -593,8 +598,12 @@
               </a>
             </div>
           </div>
-        </div>
-        <div class="flex justify-center mt-12 space-x-4">
+        </div> -->
+        <div
+          id="pagination-container"
+          class="flex justify-center mt-12 space-x-4"
+        ></div>
+        <!-- <div class="flex justify-center mt-12 space-x-4">
           <button
             class="w-10 h-10 flex items-center justify-center rounded-lg bg-teal-600 text-white font-medium"
           >
@@ -615,7 +624,7 @@
           >
             Next
           </button>
-        </div>
+        </div> -->
       </div>
     </main>
     <div class="bg-gray-100/70 py-10 md:py-16">

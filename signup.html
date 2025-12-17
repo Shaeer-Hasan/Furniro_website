@@ -96,12 +96,12 @@
           <h2 class="text-2xl font-semibold text-gray-900 text-center mb-8">
             Sign Up
           </h2>
-          <form action="#" method="POST" class="space-y-6">
+          <form onsubmit="return false;" method="POST" class="space-y-6">
             <div>
               <div class="relative">
                 <input
-                  type="name"
-                  id="name"
+                  type="text"
+                  id="signup-name"
                   name="name"
                   placeholder="Name"
                   class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:ring-teal-500 focus:border-teal-500"
@@ -113,7 +113,7 @@
               <div class="relative">
                 <input
                   type="email"
-                  id="email"
+                  id="signup-email"
                   name="email"
                   placeholder="Email"
                   class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:ring-teal-500 focus:border-teal-500"
@@ -125,7 +125,7 @@
               <div class="relative">
                 <input
                   type="password"
-                  id="password"
+                  id="signup-password"
                   name="password"
                   placeholder="Password"
                   class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 focus:ring-teal-500 focus:border-teal-500"
@@ -141,6 +141,7 @@
             </div>
             <button
               type="submit"
+              id="signup-btn"
               class="w-full py-3 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition duration-300 flex justify-center items-center space-x-2"
             >
               <span>Sign Up</span>
@@ -156,6 +157,7 @@
             >
           </p>
           <button
+            id="google-signup"
             class="w-full py-3 mt-3 border bg-gray-100 hover:bg-gray-300 font-semibold rounded-lg transition duration-300 flex justify-center items-center space-x-2 animate__animated animate__heartBeat"
           >
             <span>Continue With Google</span>
