@@ -1,53 +1,35 @@
 $(document).ready(function () {
-  // --- SIGN UP LOGIC ---
   $("#signup-btn").on("click", function (e) {
     e.preventDefault();
-
-    // Get values from inputs
     const name = $("#signup-name").val();
     const email = $("#signup-email").val();
     const password = $("#signup-password").val();
-
-    // Validation
     if (!name || !email || !password) {
       alert("Please fill in all fields!");
       return;
     }
-
-    // Create user object
     const userData = {
       name: name,
       email: email,
       password: password,
     };
-
-    // Save to LocalStorage
     localStorage.setItem("userCredentials", JSON.stringify(userData));
-
     alert("Registration Successful! Please Sign In.");
     window.location.href = "signin.html";
   });
-
-  // --- SIGN IN LOGIC ---
   $("#signin-btn").on("click", function (e) {
     e.preventDefault();
-    console.log("Sign In button clicked!"); // Check if button works
-
+    console.log("Sign In button clicked!");
     const emailInput = $("#signin-email").val();
     const passwordInput = $("#signin-password").val();
-
     const savedData = localStorage.getItem("userCredentials");
-    console.log("Data in Storage:", savedData); // Check if data exists
-
+    console.log("Data in Storage:", savedData);
     if (savedData) {
       const user = JSON.parse(savedData);
-
       if (emailInput === user.email && passwordInput === user.password) {
         sessionStorage.setItem("isLoggedIn", "true");
         sessionStorage.setItem("userName", user.name);
-
         console.log("Redirecting now...");
-        // MAKE SURE THIS NAME MATCHES YOUR FILE EXACTLY
         window.location.href = "home.html";
       } else {
         alert("Invalid Email or Password!");
@@ -56,8 +38,6 @@ $(document).ready(function () {
       alert("No account found. Please Sign Up first.");
     }
   });
-
-  // --- GOOGLE SIGN UP (Simulated) ---
   $("#google-signup").on("click", function () {
     const googleUser = {
       name: "Google User",
@@ -74,8 +54,6 @@ $(document).ready(function () {
 $(document).ready(function () {
   const isLoggedIn = sessionStorage.getItem("isLoggedIn");
   const currentPage = window.location.pathname;
-
-  // 1. Auth Guard
   if (
     !isLoggedIn &&
     !currentPage.includes("signin.html") &&
@@ -83,8 +61,6 @@ $(document).ready(function () {
   ) {
     window.location.href = "signin.html";
   }
-
-  // 2. Fetch Data (Only on Home Page)
   if (
     currentPage.includes("home.html") ||
     currentPage.includes("index.html") ||
@@ -93,13 +69,11 @@ $(document).ready(function () {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
       .then((data) => {
-        renderFeatured(data.slice(0, 4)); // First 4 for Featured
-        renderAllProducts(data.slice(4, 12)); // Next 8 for "Our Products"
-        renderCategories(data); // Build categories based on data
+        renderFeatured(data.slice(0, 4));
+        renderAllProducts(data.slice(4, 12));
+        renderCategories(data);
       });
   }
-
-  // --- RENDER FEATURED PRODUCTS ---
   function renderFeatured(products) {
     let html = "";
     products.forEach((item) => {
@@ -120,14 +94,10 @@ $(document).ready(function () {
     });
     $("#featured-container").html(html);
   }
-
-  // --- RENDER CATEGORIES ---
   function renderCategories(products) {
-    // Extract unique categories from the product list
     const categories = [...new Set(products.map((p) => p.category))];
     let html = "";
     categories.forEach((cat) => {
-      // Find one image to represent the category
       const sampleImg = products.find((p) => p.category === cat).image;
       html += `
             <a href="#" class="group w-64 md:w-72 lg:w-80 flex-shrink-0 relative rounded-xl overflow-hidden shadow-lg">
@@ -141,8 +111,6 @@ $(document).ready(function () {
     });
     $("#category-container").html(html);
   }
-
-  // --- RENDER ALL PRODUCTS ---
   function renderAllProducts(products) {
     let html = "";
     products.forEach((item) => {
@@ -165,15 +133,12 @@ $(document).ready(function () {
     $("#all-products-container").html(html);
   }
 });
-
 //------------shop, product, cart-------------
 $(document).ready(function () {
-  // --- GLOBAL VARIABLES & STATE ---
   let allProducts = [];
   let filteredProducts = [];
   let itemsPerPage = 8;
   let currentPage = 1;
-
   const isLoggedIn = sessionStorage.getItem("isLoggedIn");
   const path = window.location.pathname;
   const isHomePage =
@@ -181,8 +146,6 @@ $(document).ready(function () {
   const isShopPage = path.includes("shop.html");
   const isProductPage = path.includes("product.html");
   const isCartPage = path.includes("Cart.html");
-
-  // 1. AUTH GUARD
   if (
     !isLoggedIn &&
     !path.includes("signin.html") &&
@@ -190,33 +153,25 @@ $(document).ready(function () {
   ) {
     window.location.href = "signin.html";
   }
-
-  // 2. INITIALIZATION
   init();
-
   async function init() {
     try {
       const res = await fetch("https://fakestoreapi.com/products");
       allProducts = await res.json();
-
       if (isHomePage) renderHome(allProducts);
       if (isShopPage) setupShop(allProducts);
       if (isProductPage) setupProductDetails();
       if (isCartPage) renderCart();
-
-      updateCartCount(); // Update nav icon count on every page
+      updateCartCount();
     } catch (err) {
       console.error("Data Fetch Error:", err);
     }
   }
-
-  // --- HOME PAGE LOGIC ---
   function renderHome(data) {
     renderProducts(data.slice(0, 4), "#featured-container", true);
     renderProducts(data.slice(4, 12), "#all-products-container", false);
     renderCategories(data);
   }
-
   function renderProducts(products, container, isFeatured) {
     let html = products
       .map(
@@ -255,7 +210,6 @@ $(document).ready(function () {
       .join("");
     $(container).html(html);
   }
-
   function renderCategories(products) {
     const categories = [...new Set(products.map((p) => p.category))];
     let html = categories
@@ -274,8 +228,6 @@ $(document).ready(function () {
       .join("");
     $("#category-container").html(html);
   }
-
-  // --- SHOP PAGE LOGIC ---
   function setupShop(data) {
     const categories = ["all", ...new Set(data.map((p) => p.category))];
     $("#category-filter").html(
@@ -285,31 +237,25 @@ $(document).ready(function () {
     );
     runFiltering();
   }
-
   function runFiltering() {
     const query = $("#shop-search").val().toLowerCase();
     const cat = $("#category-filter").val();
-
     filteredProducts = allProducts.filter(
       (p) =>
         p.title.toLowerCase().includes(query) &&
         (cat === "all" || p.category === cat)
     );
-
     const sort = $("#sort").val();
     if (sort === "Price: Low to High")
       filteredProducts.sort((a, b) => a.price - b.price);
     if (sort === "Newest") filteredProducts.sort((a, b) => b.id - a.id);
-
     currentPage = 1;
     updateShopUI();
   }
-
   function updateShopUI() {
     itemsPerPage = parseInt($("#show").val()) || 8;
     const start = (currentPage - 1) * itemsPerPage;
     const paged = filteredProducts.slice(start, start + itemsPerPage);
-
     renderShopGrid(paged);
     renderPagination(filteredProducts.length);
     $("#result-count").text(
@@ -319,7 +265,6 @@ $(document).ready(function () {
       )} of ${filteredProducts.length} results`
     );
   }
-
   function renderShopGrid(products) {
     let html = products
       .map(
@@ -347,12 +292,9 @@ $(document).ready(function () {
       html || "<p class='col-span-full text-center py-10'>No items found.</p>"
     );
   }
-
-  // --- PRODUCT DETAIL LOGIC ---
   function setupProductDetails() {
     const id = new URLSearchParams(window.location.search).get("id");
     if (!id) return;
-
     fetch(`https://fakestoreapi.com/products/${id}`)
       .then((res) => res.json())
       .then((p) => {
@@ -362,16 +304,12 @@ $(document).ready(function () {
         $("#p-cat").text(p.category);
         $("#p-main-img, #p-detail-img-1, #p-detail-img-2").attr("src", p.image);
         renderStars(p.rating.rate);
-
-        // Add to Cart functionality on Product Page
         $(".bg-teal-600:contains('Add To Cart')").on("click", function () {
           const qty = parseInt($("input[value='1']").val()) || 1;
           addToCart(p.id, p.title, p.price, p.image, qty);
         });
       });
   }
-
-  // --- CART LOGIC ---
   function addToCart(id, title, price, image, qty = 1) {
     let cart = JSON.parse(localStorage.getItem("myCart")) || [];
     const existing = cart.find((item) => item.id == id);
@@ -382,7 +320,6 @@ $(document).ready(function () {
     updateCartCount();
     alert("Added to cart!");
   }
-
   function renderCart() {
     const cart = JSON.parse(localStorage.getItem("myCart")) || [];
     let total = 0;
@@ -411,39 +348,32 @@ $(document).ready(function () {
             </div>`;
       })
       .join("");
-
     $("#cart-items-container").html(html || "Your cart is empty");
     $(".text-gray-800:contains('Rs.'), .text-teal-600").text(
       `$${total.toFixed(2)}`
     );
   }
-
-  // --- HELPERS & LISTENERS ---
   $(document).on("click", ".add-to-cart-btn", function () {
     const d = $(this).data();
     addToCart(d.id, d.title, d.price, d.img);
   });
-
   $(document).on("change", ".update-qty", function () {
     let cart = JSON.parse(localStorage.getItem("myCart"));
     cart[$(this).data("index")].quantity = parseInt($(this).val());
     localStorage.setItem("myCart", JSON.stringify(cart));
     renderCart();
   });
-
   $(document).on("click", ".delete-item", function () {
     let cart = JSON.parse(localStorage.getItem("myCart"));
     cart.splice($(this).data("index"), 1);
     localStorage.setItem("myCart", JSON.stringify(cart));
     renderCart();
   });
-
   function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem("myCart")) || [];
     const count = cart.reduce((acc, item) => acc + item.quantity, 0);
     $("#cart-count-badge").text(count); // Make sure your Nav has an element with this ID
   }
-
   function renderStars(rate) {
     let stars = "";
     for (let i = 1; i <= 5; i++) {
@@ -457,7 +387,6 @@ $(document).ready(function () {
     }
     $(".text-yellow-500").html(stars);
   }
-
   $("#shop-search, #sort, #category-filter, #show").on(
     "change input",
     runFiltering
@@ -469,23 +398,16 @@ $(document).ready(function () {
   });
 });
 $(document).ready(function () {
-  // 1. Detect if we are on the Checkout Page
   if (window.location.pathname.toLowerCase().includes("checkout")) {
     console.log("Checkout logic initialized.");
     renderCheckoutSummary();
-
-    // 2. Handle the "Place Order" button (Button is outside the form)
     $(document).on("click", "#place-order-btn", function (e) {
       e.preventDefault();
-
-      // Check if cart is empty first
       const cart = JSON.parse(localStorage.getItem("myCart")) || [];
       if (cart.length === 0) {
         alert("Your cart is empty! Please add products before checking out.");
         return;
       }
-
-      // 3. Manually collect data from your input IDs
       const billingData = {
         firstName: $("#first_name").val(),
         lastName: $("#last_name").val(),
@@ -496,8 +418,6 @@ $(document).ready(function () {
         zip: $("#zip_code").val(),
         payment: $('input[name="payment_method"]:checked').val(),
       };
-
-      // 4. Basic Validation
       if (
         !billingData.firstName ||
         !billingData.email ||
@@ -506,7 +426,6 @@ $(document).ready(function () {
         alert("Please fill in all required fields (Name, Email, and Address).");
         return;
       }
-
       $('input[name="payment_method"]').on("change", function () {
         $(".payment-label")
           .removeClass("text-gray-900 font-semibold")
@@ -516,8 +435,6 @@ $(document).ready(function () {
           .addClass("text-gray-900 font-semibold")
           .removeClass("text-gray-300");
       });
-
-      // 5. Generate Order Summary for the Confirmation Message
       let itemsSummary = cart
         .map((item) => `- ${item.title} (x${item.quantity})`)
         .join("\n");
@@ -525,40 +442,26 @@ $(document).ready(function () {
         (sum, item) => sum + item.price * item.quantity,
         0
       );
-
       const finalMessage = `
  ORDER PLACED SUCCESSFULLY!
-
 --- Shipping Details ---
 Name: ${billingData.firstName} ${billingData.lastName}
 Address: ${billingData.address}, ${billingData.city}
 Phone: ${billingData.phone}
-
 --- Order Summary ---
 ${itemsSummary}
-
 Total Amount: $${totalAmount.toFixed(2)}
 Payment Method: ${billingData.payment.toUpperCase().replace("_", " ")}
-
 Thank you for your purchase!
             `;
-
-      // 6. Final Action
       alert(finalMessage);
-
-      // Clear the cart from storage
       localStorage.removeItem("myCart");
-
-      // Redirect to home or success page
       window.location.href = "home.html";
     });
   }
-
-  // --- Helper Function to Render the Order Summary List ---
   function renderCheckoutSummary() {
     const cart = JSON.parse(localStorage.getItem("myCart")) || [];
     let subtotal = 0;
-
     let html = cart
       .map((item) => {
         const itemSubtotal = item.price * item.quantity;
@@ -574,8 +477,6 @@ Thank you for your purchase!
                 </div>`;
       })
       .join("");
-
-    // Inject into your HTML containers
     $("#checkout-items").html(
       html || "<p class='text-gray-400'>No items in order.</p>"
     );
@@ -583,22 +484,13 @@ Thank you for your purchase!
     $("#checkout-total").text(`$${subtotal.toFixed(2)}`);
   }
 });
-
 //------------------- contact page ------------------
-
 $(document).ready(function () {
-  // --- 1. GLOBAL PATH DETECTION ---
   const path = window.location.pathname.toLowerCase();
   const isContactPage = path.includes("contact");
-
-  // ==========================================
-  // --- 2. CONTACT PAGE LOGIC ---
-  // ==========================================
   if (isContactPage) {
     $("#contact-form").on("submit", function (e) {
-      e.preventDefault(); // Stop page from refreshing
-
-      // 1. Collect the data from inputs
+      e.preventDefault();
       const contactData = {
         name: $("#name").val(),
         email: $("#email").val(),
@@ -606,8 +498,6 @@ $(document).ready(function () {
         message: $("#message").val(),
         date: new Date().toLocaleString(),
       };
-
-      // 2. Save to Local Storage
       let existingInquiries =
         JSON.parse(localStorage.getItem("contactInquiries")) || [];
       existingInquiries.push(contactData);
@@ -615,12 +505,9 @@ $(document).ready(function () {
         "contactInquiries",
         JSON.stringify(existingInquiries)
       );
-
-      // 3. Update the UI (Fade out form, show message)
       $(this).fadeOut(400, function () {
         $("#contact-success-msg").removeClass("hidden").fadeIn();
       });
-
       console.log("Contact detail saved to storage:", contactData);
     });
   }
