@@ -15,9 +15,9 @@
       referrerpolicy="no-referrer"
     />
     <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
   </head>
   <body>
     <div
@@ -103,7 +103,7 @@
         </h2>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 md:gap-16">
           <div class="lg:col-span-2">
-            <form action="#" method="POST" class="space-y-6">
+            <form action="#" id="checkout-form" method="POST" class="space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label
@@ -269,24 +269,30 @@
                   <span>Product</span>
                   <span>Subtotal</span>
                 </div>
-                <div class="flex justify-between text-sm text-gray-600">
+                <div id="checkout-items" class="space-y-3"></div>
+                <!-- <div class="flex justify-between text-sm text-gray-600">
                   <span>Asgaard sofa X 1</span>
                   <span>Rs. 250,000.00</span>
-                </div>
+                </div> -->
                 <div
                   class="flex justify-between text-sm text-gray-600 pt-2 border-t border-gray-100"
                 >
                   <span>Subtotal</span>
-                  <span>Rs. 250,000.00</span>
+                  <span id="checkout-subtotal">Rs. 250,000.00</span>
                 </div>
                 <div class="flex justify-between font-bold text-lg">
                   <span>Total</span>
-                  <span class="text-teal-600">Rs. 250,000.00</span>
+                  <span class="text-teal-600" id="checkout-total"
+                    >Rs. 250,000.00</span
+                  >
                 </div>
               </div>
               <div class="space-y-4">
                 <div class="text-sm">
-                  <label class="flex items-center space-x-2 cursor-pointer">
+                  <label
+                    class="flex items-center space-x-2 cursor-pointer"
+                    class="payment-label"
+                  >
                     <input
                       type="radio"
                       name="payment_method"
@@ -305,25 +311,35 @@
                   </p>
                 </div>
                 <div class="text-sm">
-                  <label class="flex items-center space-x-2 cursor-pointer">
+                  <label
+                    class="flex items-center space-x-2 cursor-pointer"
+                    class="payment-label"
+                  >
                     <input
                       type="radio"
                       name="payment_method"
                       value="bank_transfer"
                       class="text-gray-900 focus:ring-teal-500"
                     />
-                    <span class="text-gray-300">Direct Bank Transfer</span>
+                    <span class="text-gray-900 font-semibold"
+                      >Direct Bank Transfer</span
+                    >
                   </label>
                 </div>
                 <div class="text-sm">
-                  <label class="flex items-center space-x-2 cursor-pointer">
+                  <label
+                    class="flex items-center space-x-2 cursor-pointer"
+                    class="payment-label"
+                  >
                     <input
                       type="radio"
                       name="payment_method"
                       value="cash_on_delivery"
                       class="text-gray-900 focus:ring-teal-500"
                     />
-                    <span class="text-gray-300">Cash On Delivery</span>
+                    <span class="text-gray-900 font-semibold"
+                      >Cash On Delivery</span
+                    >
                   </label>
                 </div>
                 <p class="text-xs text-gray-500 pt-2">
@@ -336,6 +352,7 @@
               <div class="mt-6 text-center">
                 <button
                   type="submit"
+                  id="place-order-btn"
                   class="w-full py-3 border border-teal-600 text-teal-600 font-semibold rounded-lg hover:bg-teal-600 hover:text-white transition duration-300"
                 >
                   Place order

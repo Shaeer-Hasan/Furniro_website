@@ -168,76 +168,100 @@ $(document).ready(function () {
 
 //------------shop, product, cart-------------
 $(document).ready(function () {
-    // --- GLOBAL VARIABLES & STATE ---
-    let allProducts = [];
-    let filteredProducts = [];
-    let itemsPerPage = 8;
-    let currentPage = 1;
+  // --- GLOBAL VARIABLES & STATE ---
+  let allProducts = [];
+  let filteredProducts = [];
+  let itemsPerPage = 8;
+  let currentPage = 1;
 
-    const isLoggedIn = sessionStorage.getItem("isLoggedIn");
-    const path = window.location.pathname;
-    const isHomePage = path.includes("home.html") || path.includes("index.html") || path === "/";
-    const isShopPage = path.includes("shop.html");
-    const isProductPage = path.includes("product.html");
-    const isCartPage = path.includes("Cart.html");
+  const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+  const path = window.location.pathname;
+  const isHomePage =
+    path.includes("home.html") || path.includes("index.html") || path === "/";
+  const isShopPage = path.includes("shop.html");
+  const isProductPage = path.includes("product.html");
+  const isCartPage = path.includes("Cart.html");
 
-    // 1. AUTH GUARD
-    if (!isLoggedIn && !path.includes("signin.html") && !path.includes("signup.html")) {
-        window.location.href = "signin.html";
+  // 1. AUTH GUARD
+  if (
+    !isLoggedIn &&
+    !path.includes("signin.html") &&
+    !path.includes("signup.html")
+  ) {
+    window.location.href = "signin.html";
+  }
+
+  // 2. INITIALIZATION
+  init();
+
+  async function init() {
+    try {
+      const res = await fetch("https://fakestoreapi.com/products");
+      allProducts = await res.json();
+
+      if (isHomePage) renderHome(allProducts);
+      if (isShopPage) setupShop(allProducts);
+      if (isProductPage) setupProductDetails();
+      if (isCartPage) renderCart();
+
+      updateCartCount(); // Update nav icon count on every page
+    } catch (err) {
+      console.error("Data Fetch Error:", err);
     }
+  }
 
-    // 2. INITIALIZATION
-    init();
+  // --- HOME PAGE LOGIC ---
+  function renderHome(data) {
+    renderProducts(data.slice(0, 4), "#featured-container", true);
+    renderProducts(data.slice(4, 12), "#all-products-container", false);
+    renderCategories(data);
+  }
 
-    async function init() {
-        try {
-            const res = await fetch('https://fakestoreapi.com/products');
-            allProducts = await res.json();
-
-            if (isHomePage) renderHome(allProducts);
-            if (isShopPage) setupShop(allProducts);
-            if (isProductPage) setupProductDetails();
-            if (isCartPage) renderCart();
-            
-            updateCartCount(); // Update nav icon count on every page
-        } catch (err) {
-            console.error("Data Fetch Error:", err);
-        }
-    }
-
-    // --- HOME PAGE LOGIC ---
-    function renderHome(data) {
-        renderProducts(data.slice(0, 4), "#featured-container", true);
-        renderProducts(data.slice(4, 12), "#all-products-container", false);
-        renderCategories(data);
-    }
-
-    function renderProducts(products, container, isFeatured) {
-        let html = products.map(item => `
+  function renderProducts(products, container, isFeatured) {
+    let html = products
+      .map(
+        (item) => `
             <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100">
                 <div class="relative h-64 bg-gray-100/50 flex items-center justify-center p-4">
-                    ${isFeatured ? '<span class="absolute top-4 left-4 text-xs font-semibold px-3 py-1 rounded-full bg-green-600 text-white">Featured</span>' : ''}
-                    <a href="product.html?id=${item.id}"><img src="${item.image}" class="max-h-full max-w-full object-contain"></a>
+                    ${
+                      isFeatured
+                        ? '<span class="absolute top-4 left-4 text-xs font-semibold px-3 py-1 rounded-full bg-green-600 text-white">Featured</span>'
+                        : ""
+                    }
+                    <a href="product.html?id=${item.id}"><img src="${
+          item.image
+        }" class="max-h-full max-w-full object-contain"></a>
                 </div>
                 <div class="p-4">
-                    <a href="product.html?id=${item.id}"><h3 class="text-sm font-medium text-gray-800 mb-2 truncate">${item.title}</h3></a>
+                    <a href="product.html?id=${
+                      item.id
+                    }"><h3 class="text-sm font-medium text-gray-800 mb-2 truncate">${
+          item.title
+        }</h3></a>
                     <div class="flex justify-between items-center">
-                        <p class="text-lg font-bold text-gray-900">$${item.price}</p>
+                        <p class="text-lg font-bold text-gray-900">$${
+                          item.price
+                        }</p>
                         <button class="add-to-cart-btn w-8 h-8 rounded-lg bg-teal-500 text-white" 
-                                data-id="${item.id}" data-title="${item.title}" data-price="${item.price}" data-img="${item.image}">
+                                data-id="${item.id}" data-title="${
+          item.title
+        }" data-price="${item.price}" data-img="${item.image}">
                             <i class="fa-solid fa-shopping-cart"></i>
                         </button>
                     </div>
                 </div>
-            </div>`).join("");
-        $(container).html(html);
-    }
+            </div>`
+      )
+      .join("");
+    $(container).html(html);
+  }
 
-    function renderCategories(products) {
-        const categories = [...new Set(products.map(p => p.category))];
-        let html = categories.map(cat => {
-            const sampleImg = products.find(p => p.category === cat).image;
-            return `
+  function renderCategories(products) {
+    const categories = [...new Set(products.map((p) => p.category))];
+    let html = categories
+      .map((cat) => {
+        const sampleImg = products.find((p) => p.category === cat).image;
+        return `
             <a href="shop.html" class="group w-64 md:w-72 lg:w-80 flex-shrink-0 relative rounded-xl overflow-hidden shadow-lg">
                 <img src="${sampleImg}" class="w-full h-80 object-cover transform group-hover:scale-105 transition duration-500">
                 <div class="absolute inset-0 bg-black/40"></div>
@@ -246,45 +270,60 @@ $(document).ready(function () {
                     <p class="text-sm text-gray-200">View Collection</p>
                 </div>
             </a>`;
-        }).join("");
-        $("#category-container").html(html);
-    }
+      })
+      .join("");
+    $("#category-container").html(html);
+  }
 
-    // --- SHOP PAGE LOGIC ---
-    function setupShop(data) {
-        const categories = ["all", ...new Set(data.map(p => p.category))];
-        $("#category-filter").html(categories.map(c => `<option value="${c}">${c.toUpperCase()}</option>`).join(""));
-        runFiltering();
-    }
+  // --- SHOP PAGE LOGIC ---
+  function setupShop(data) {
+    const categories = ["all", ...new Set(data.map((p) => p.category))];
+    $("#category-filter").html(
+      categories
+        .map((c) => `<option value="${c}">${c.toUpperCase()}</option>`)
+        .join("")
+    );
+    runFiltering();
+  }
 
-    function runFiltering() {
-        const query = $("#shop-search").val().toLowerCase();
-        const cat = $("#category-filter").val();
-        
-        filteredProducts = allProducts.filter(p => 
-            (p.title.toLowerCase().includes(query)) && (cat === "all" || p.category === cat)
-        );
+  function runFiltering() {
+    const query = $("#shop-search").val().toLowerCase();
+    const cat = $("#category-filter").val();
 
-        const sort = $("#sort").val();
-        if (sort === "Price: Low to High") filteredProducts.sort((a, b) => a.price - b.price);
-        if (sort === "Newest") filteredProducts.sort((a, b) => b.id - a.id);
+    filteredProducts = allProducts.filter(
+      (p) =>
+        p.title.toLowerCase().includes(query) &&
+        (cat === "all" || p.category === cat)
+    );
 
-        currentPage = 1;
-        updateShopUI();
-    }
+    const sort = $("#sort").val();
+    if (sort === "Price: Low to High")
+      filteredProducts.sort((a, b) => a.price - b.price);
+    if (sort === "Newest") filteredProducts.sort((a, b) => b.id - a.id);
 
-    function updateShopUI() {
-        itemsPerPage = parseInt($("#show").val()) || 8;
-        const start = (currentPage - 1) * itemsPerPage;
-        const paged = filteredProducts.slice(start, start + itemsPerPage);
-        
-        renderShopGrid(paged);
-        renderPagination(filteredProducts.length);
-        $("#result-count").text(`Showing ${filteredProducts.length > 0 ? start + 1 : 0}-${Math.min(start + itemsPerPage, filteredProducts.length)} of ${filteredProducts.length} results`);
-    }
+    currentPage = 1;
+    updateShopUI();
+  }
 
-    function renderShopGrid(products) {
-        let html = products.map(item => `
+  function updateShopUI() {
+    itemsPerPage = parseInt($("#show").val()) || 8;
+    const start = (currentPage - 1) * itemsPerPage;
+    const paged = filteredProducts.slice(start, start + itemsPerPage);
+
+    renderShopGrid(paged);
+    renderPagination(filteredProducts.length);
+    $("#result-count").text(
+      `Showing ${filteredProducts.length > 0 ? start + 1 : 0}-${Math.min(
+        start + itemsPerPage,
+        filteredProducts.length
+      )} of ${filteredProducts.length} results`
+    );
+  }
+
+  function renderShopGrid(products) {
+    let html = products
+      .map(
+        (item) => `
             <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-200">
                 <a href="product.html?id=${item.id}">
                     <div class="h-64 flex items-center justify-center p-5 bg-gray-50">
@@ -301,110 +340,288 @@ $(document).ready(function () {
                         <i class="fas fa-shopping-cart"></i>
                     </button>
                 </div>
-            </div>`).join("");
-        $("#shop-container").html(html || "<p class='col-span-full text-center py-10'>No items found.</p>");
-    }
+            </div>`
+      )
+      .join("");
+    $("#shop-container").html(
+      html || "<p class='col-span-full text-center py-10'>No items found.</p>"
+    );
+  }
 
-    // --- PRODUCT DETAIL LOGIC ---
-    function setupProductDetails() {
-        const id = new URLSearchParams(window.location.search).get('id');
-        if (!id) return;
-        
-        fetch(`https://fakestoreapi.com/products/${id}`)
-            .then(res => res.json())
-            .then(p => {
-                $("#p-title, #p-breadcrumb").text(p.title);
-                $("#p-price").text(`$${p.price}`);
-                $("#p-desc").text(p.description);
-                $("#p-cat").text(p.category);
-                $("#p-main-img, #p-detail-img-1, #p-detail-img-2").attr("src", p.image);
-                renderStars(p.rating.rate);
-                
-                // Add to Cart functionality on Product Page
-                $(".bg-teal-600:contains('Add To Cart')").on("click", function() {
-                    const qty = parseInt($("input[value='1']").val()) || 1;
-                    addToCart(p.id, p.title, p.price, p.image, qty);
-                });
-            });
-    }
+  // --- PRODUCT DETAIL LOGIC ---
+  function setupProductDetails() {
+    const id = new URLSearchParams(window.location.search).get("id");
+    if (!id) return;
 
-    // --- CART LOGIC ---
-    function addToCart(id, title, price, image, qty = 1) {
-        let cart = JSON.parse(localStorage.getItem("myCart")) || [];
-        const existing = cart.find(item => item.id == id);
-        if (existing) existing.quantity += qty;
-        else cart.push({ id, title, price, image, quantity: qty });
-        
-        localStorage.setItem("myCart", JSON.stringify(cart));
-        updateCartCount();
-        alert("Added to cart!");
-    }
+    fetch(`https://fakestoreapi.com/products/${id}`)
+      .then((res) => res.json())
+      .then((p) => {
+        $("#p-title, #p-breadcrumb").text(p.title);
+        $("#p-price").text(`$${p.price}`);
+        $("#p-desc").text(p.description);
+        $("#p-cat").text(p.category);
+        $("#p-main-img, #p-detail-img-1, #p-detail-img-2").attr("src", p.image);
+        renderStars(p.rating.rate);
 
-    function renderCart() {
-        const cart = JSON.parse(localStorage.getItem("myCart")) || [];
-        let total = 0;
-        let html = cart.map((item, i) => {
-            const sub = item.price * item.quantity;
-            total += sub;
-            return `
+        // Add to Cart functionality on Product Page
+        $(".bg-teal-600:contains('Add To Cart')").on("click", function () {
+          const qty = parseInt($("input[value='1']").val()) || 1;
+          addToCart(p.id, p.title, p.price, p.image, qty);
+        });
+      });
+  }
+
+  // --- CART LOGIC ---
+  function addToCart(id, title, price, image, qty = 1) {
+    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    const existing = cart.find((item) => item.id == id);
+    if (existing) existing.quantity += qty;
+    else cart.push({ id, title, price, image, quantity: qty });
+
+    localStorage.setItem("myCart", JSON.stringify(cart));
+    updateCartCount();
+    alert("Added to cart!");
+  }
+
+  function renderCart() {
+    const cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    let total = 0;
+    let html = cart
+      .map((item, i) => {
+        const sub = item.price * item.quantity;
+        total += sub;
+        return `
             <div class="grid grid-cols-4 gap-4 items-center py-4 border-b">
                 <div class="col-span-1 flex items-center space-x-4">
                     <img src="${item.image}" class="w-16 h-16 object-contain" />
-                    <span class="text-sm font-medium hidden md:block">${item.title}</span>
+                    <span class="text-sm font-medium hidden md:block">${
+                      item.title
+                    }</span>
                 </div>
                 <div class="hidden sm:block text-sm">$${item.price}</div>
                 <div class="col-span-1">
-                    <input type="number" value="${item.quantity}" min="1" class="update-qty w-12 border rounded" data-index="${i}" />
+                    <input type="number" value="${
+                      item.quantity
+                    }" min="1" class="update-qty w-12 border rounded" data-index="${i}" />
                 </div>
                 <div class="col-span-3 sm:col-span-1 flex justify-end items-center space-x-4">
                     <span class="font-semibold">$${sub.toFixed(2)}</span>
                     <button class="delete-item text-red-500" data-index="${i}"><i class="fa-solid fa-trash-alt"></i></button>
                 </div>
             </div>`;
-        }).join("");
+      })
+      .join("");
 
-        $("#cart-items-container").html(html || "Your cart is empty");
-        $(".text-gray-800:contains('Rs.'), .text-teal-600").text(`$${total.toFixed(2)}`);
+    $("#cart-items-container").html(html || "Your cart is empty");
+    $(".text-gray-800:contains('Rs.'), .text-teal-600").text(
+      `$${total.toFixed(2)}`
+    );
+  }
+
+  // --- HELPERS & LISTENERS ---
+  $(document).on("click", ".add-to-cart-btn", function () {
+    const d = $(this).data();
+    addToCart(d.id, d.title, d.price, d.img);
+  });
+
+  $(document).on("change", ".update-qty", function () {
+    let cart = JSON.parse(localStorage.getItem("myCart"));
+    cart[$(this).data("index")].quantity = parseInt($(this).val());
+    localStorage.setItem("myCart", JSON.stringify(cart));
+    renderCart();
+  });
+
+  $(document).on("click", ".delete-item", function () {
+    let cart = JSON.parse(localStorage.getItem("myCart"));
+    cart.splice($(this).data("index"), 1);
+    localStorage.setItem("myCart", JSON.stringify(cart));
+    renderCart();
+  });
+
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    const count = cart.reduce((acc, item) => acc + item.quantity, 0);
+    $("#cart-count-badge").text(count); // Make sure your Nav has an element with this ID
+  }
+
+  function renderStars(rate) {
+    let stars = "";
+    for (let i = 1; i <= 5; i++) {
+      stars += `<i class="fa-solid ${
+        i <= rate
+          ? "fa-star"
+          : i - 0.5 <= rate
+          ? "fa-star-half-stroke"
+          : "fa-regular fa-star"
+      }"></i>`;
     }
+    $(".text-yellow-500").html(stars);
+  }
 
-    // --- HELPERS & LISTENERS ---
-    $(document).on("click", ".add-to-cart-btn", function() {
-        const d = $(this).data();
-        addToCart(d.id, d.title, d.price, d.img);
+  $("#shop-search, #sort, #category-filter, #show").on(
+    "change input",
+    runFiltering
+  );
+  $(document).on("click", ".page-btn", function () {
+    currentPage = $(this).data("page");
+    updateShopUI();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+});
+$(document).ready(function () {
+  // 1. Detect if we are on the Checkout Page
+  if (window.location.pathname.toLowerCase().includes("checkout")) {
+    console.log("Checkout logic initialized.");
+    renderCheckoutSummary();
+
+    // 2. Handle the "Place Order" button (Button is outside the form)
+    $(document).on("click", "#place-order-btn", function (e) {
+      e.preventDefault();
+
+      // Check if cart is empty first
+      const cart = JSON.parse(localStorage.getItem("myCart")) || [];
+      if (cart.length === 0) {
+        alert("Your cart is empty! Please add products before checking out.");
+        return;
+      }
+
+      // 3. Manually collect data from your input IDs
+      const billingData = {
+        firstName: $("#first_name").val(),
+        lastName: $("#last_name").val(),
+        email: $("#email_address").val(),
+        phone: $("#phone").val(),
+        address: $("#street_address").val(),
+        city: $("#city").val(),
+        zip: $("#zip_code").val(),
+        payment: $('input[name="payment_method"]:checked').val(),
+      };
+
+      // 4. Basic Validation
+      if (
+        !billingData.firstName ||
+        !billingData.email ||
+        !billingData.address
+      ) {
+        alert("Please fill in all required fields (Name, Email, and Address).");
+        return;
+      }
+
+      $('input[name="payment_method"]').on("change", function () {
+        $(".payment-label")
+          .removeClass("text-gray-900 font-semibold")
+          .addClass("text-gray-300");
+        $(this)
+          .next("span")
+          .addClass("text-gray-900 font-semibold")
+          .removeClass("text-gray-300");
+      });
+
+      // 5. Generate Order Summary for the Confirmation Message
+      let itemsSummary = cart
+        .map((item) => `- ${item.title} (x${item.quantity})`)
+        .join("\n");
+      let totalAmount = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+
+      const finalMessage = `
+ ORDER PLACED SUCCESSFULLY!
+
+--- Shipping Details ---
+Name: ${billingData.firstName} ${billingData.lastName}
+Address: ${billingData.address}, ${billingData.city}
+Phone: ${billingData.phone}
+
+--- Order Summary ---
+${itemsSummary}
+
+Total Amount: $${totalAmount.toFixed(2)}
+Payment Method: ${billingData.payment.toUpperCase().replace("_", " ")}
+
+Thank you for your purchase!
+            `;
+
+      // 6. Final Action
+      alert(finalMessage);
+
+      // Clear the cart from storage
+      localStorage.removeItem("myCart");
+
+      // Redirect to home or success page
+      window.location.href = "home.html";
     });
+  }
 
-    $(document).on("change", ".update-qty", function() {
-        let cart = JSON.parse(localStorage.getItem("myCart"));
-        cart[$(this).data("index")].quantity = parseInt($(this).val());
-        localStorage.setItem("myCart", JSON.stringify(cart));
-        renderCart();
+  // --- Helper Function to Render the Order Summary List ---
+  function renderCheckoutSummary() {
+    const cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    let subtotal = 0;
+
+    let html = cart
+      .map((item) => {
+        const itemSubtotal = item.price * item.quantity;
+        subtotal += itemSubtotal;
+        return `
+                <div class="flex justify-between text-sm text-gray-600 border-b border-gray-50 pb-2">
+                    <span class="truncate w-48">${
+                      item.title
+                    } <strong class="text-gray-900">X ${
+          item.quantity
+        }</strong></span>
+                    <span class="font-medium">$${itemSubtotal.toFixed(2)}</span>
+                </div>`;
+      })
+      .join("");
+
+    // Inject into your HTML containers
+    $("#checkout-items").html(
+      html || "<p class='text-gray-400'>No items in order.</p>"
+    );
+    $("#checkout-subtotal").text(`$${subtotal.toFixed(2)}`);
+    $("#checkout-total").text(`$${subtotal.toFixed(2)}`);
+  }
+});
+
+//------------------- contact page ------------------
+
+$(document).ready(function () {
+  // --- 1. GLOBAL PATH DETECTION ---
+  const path = window.location.pathname.toLowerCase();
+  const isContactPage = path.includes("contact");
+
+  // ==========================================
+  // --- 2. CONTACT PAGE LOGIC ---
+  // ==========================================
+  if (isContactPage) {
+    $("#contact-form").on("submit", function (e) {
+      e.preventDefault(); // Stop page from refreshing
+
+      // 1. Collect the data from inputs
+      const contactData = {
+        name: $("#name").val(),
+        email: $("#email").val(),
+        subject: $("#subject").val(),
+        message: $("#message").val(),
+        date: new Date().toLocaleString(),
+      };
+
+      // 2. Save to Local Storage
+      let existingInquiries =
+        JSON.parse(localStorage.getItem("contactInquiries")) || [];
+      existingInquiries.push(contactData);
+      localStorage.setItem(
+        "contactInquiries",
+        JSON.stringify(existingInquiries)
+      );
+
+      // 3. Update the UI (Fade out form, show message)
+      $(this).fadeOut(400, function () {
+        $("#contact-success-msg").removeClass("hidden").fadeIn();
+      });
+
+      console.log("Contact detail saved to storage:", contactData);
     });
-
-    $(document).on("click", ".delete-item", function() {
-        let cart = JSON.parse(localStorage.getItem("myCart"));
-        cart.splice($(this).data("index"), 1);
-        localStorage.setItem("myCart", JSON.stringify(cart));
-        renderCart();
-    });
-
-    function updateCartCount() {
-        const cart = JSON.parse(localStorage.getItem("myCart")) || [];
-        const count = cart.reduce((acc, item) => acc + item.quantity, 0);
-        $("#cart-count-badge").text(count); // Make sure your Nav has an element with this ID
-    }
-
-    function renderStars(rate) {
-        let stars = "";
-        for (let i = 1; i <= 5; i++) {
-            stars += `<i class="fa-solid ${i <= rate ? 'fa-star' : (i - 0.5 <= rate ? 'fa-star-half-stroke' : 'fa-regular fa-star')}"></i>`;
-        }
-        $(".text-yellow-500").html(stars);
-    }
-
-    $("#shop-search, #sort, #category-filter, #show").on("change input", runFiltering);
-    $(document).on("click", ".page-btn", function() {
-        currentPage = $(this).data("page");
-        updateShopUI();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+  }
 });
