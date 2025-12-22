@@ -150,7 +150,7 @@ $(document).ready(function () {
       .map((cat) => {
         const sampleImg = products.find((p) => p.category === cat).image;
         return `
-            <a href="shop.html" class="group w-64 md:w-72 lg:w-80 flex-shrink-0 relative rounded-xl overflow-hidden shadow-lg">
+            <a href="Shop.html" class="group w-64 md:w-72 lg:w-80 flex-shrink-0 relative rounded-xl overflow-hidden shadow-lg">
                 <img src="${sampleImg}" class="w-full h-80 object-cover transform group-hover:scale-105 transition duration-500">
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div class="absolute bottom-0 left-0 p-4 text-white">
@@ -248,7 +248,7 @@ $(document).ready(function () {
   const path = window.location.pathname;
   const isHomePage =
     path.includes("index.html") || path.includes("index.html") || path === "/";
-  const isShopPage = path.includes("shop.html");
+  const isShopPage = path.includes("Shop.html");
   const isProductPage = path.includes("product.html");
   const isCartPage = path.includes("Cart.html");
   if (
@@ -322,7 +322,7 @@ $(document).ready(function () {
       .map((cat) => {
         const sampleImg = products.find((p) => p.category === cat).image;
         return `
-            <a href="shop.html" class="group w-64 md:w-72 lg:w-80 flex-shrink-0 relative rounded-xl overflow-hidden shadow-lg">
+            <a href="Shop.html" class="group w-64 md:w-72 lg:w-80 flex-shrink-0 relative rounded-xl overflow-hidden shadow-lg">
                 <img src="${sampleImg}" class="w-full h-80 object-cover transform group-hover:scale-105 transition duration-500">
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div class="absolute bottom-0 left-0 p-4 text-white">
