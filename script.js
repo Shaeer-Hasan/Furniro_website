@@ -169,7 +169,7 @@ $(document).ready(function () {
       id: btn.data("id"),
       title: btn.data("title"),
       price: parseFloat(btn.data("price")),
-      image: btn.data("image"),
+      image: btn.data("img"),
       quantity: 1,
     };
     const existing = cart.find((item) => item.id == newItem.id);
