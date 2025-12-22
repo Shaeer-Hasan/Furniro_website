@@ -30,7 +30,7 @@ $(document).ready(function () {
         sessionStorage.setItem("isLoggedIn", "true");
         sessionStorage.setItem("userName", user.name);
         console.log("Redirecting now...");
-        window.location.href = "home.html";
+        window.location.href = "index.html";
       } else {
         alert("Invalid Email or Password!");
       }
@@ -46,7 +46,7 @@ $(document).ready(function () {
     localStorage.setItem("userCredentials", JSON.stringify(googleUser));
     sessionStorage.setItem("isLoggedIn", "true");
     alert("Signed up with Google successfully!");
-    window.location.href = "home.html";
+    window.location.href = "index.html";
   });
 });
 $(document).ready(function () {
@@ -80,7 +80,7 @@ $(document).ready(function () {
     return;
   }
   if (
-    currentPage.includes("home.html") ||
+    currentPage.includes("index.html") ||
     currentPage.includes("index.html") ||
     currentPage === "/"
   ) {
@@ -247,7 +247,7 @@ $(document).ready(function () {
   const isLoggedIn = sessionStorage.getItem("isLoggedIn");
   const path = window.location.pathname;
   const isHomePage =
-    path.includes("home.html") || path.includes("index.html") || path === "/";
+    path.includes("index.html") || path.includes("index.html") || path === "/";
   const isShopPage = path.includes("shop.html");
   const isProductPage = path.includes("product.html");
   const isCartPage = path.includes("Cart.html");
