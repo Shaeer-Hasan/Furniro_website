@@ -39,16 +39,6 @@
           >Shop</a
         >
         <a
-          href="product.html"
-          class="text-sm font-medium text-gray-700 hover:text-teal-600"
-          >Single Product</a
-        >
-        <a
-          href="Cart.html"
-          class="text-sm font-medium text-gray-700 hover:text-teal-600"
-          >Cart</a
-        >
-        <a
           href="Contact.html"
           class="text-sm font-medium text-gray-700 hover:text-teal-600"
           >Contact</a
@@ -58,9 +48,14 @@
         <div class="rounded-lg border-2 border-gray-200 bg-white p-2">
           <a href="Cart.html" class="p-3 hover:bg-gray-50/50">
             <button>
-              <div class="flex">
+              <div class="flex items-center gap-2">
                 <i class="fa-solid fa-cart-arrow-down"></i>
                 <p class="text-xs font-medium">Cart</p>
+                <span
+                  id="cart-count"
+                  class="bg-teal-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full"
+                  >0</span
+                >
               </div>
             </button>
           </a>
@@ -193,11 +188,13 @@
         </h2>
         <div class="flex space-x-3">
           <button
+            id="feat-prev"
             class="w-10 h-10 flex justify-center items-center rounded-full bg-teal-500 hover:bg-teal-600 text-white transition duration-300 shadow-md"
           >
             <i class="fa-solid fa-arrow-left text-lg"></i>
           </button>
           <button
+            id="feat-next"
             class="w-10 h-10 flex justify-center items-center rounded-full bg-gray-200 hover:bg-teal-500 hover:text-white text-gray-700 transition duration-300 shadow-md"
           >
             <i class="fa-solid fa-arrow-right text-lg"></i>
@@ -206,7 +203,7 @@
       </div>
       <div
         id="featured-container"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        class="flex overflow-x-hidden scroll-smooth gap-6 py-4"
       ></div>
     </div>
     <div class="container mx-auto px-4 py-12 md:py-20 bg-white">
@@ -216,18 +213,20 @@
         </h2>
         <div class="flex space-x-3">
           <button
+            id="cat-prev"
             class="w-10 h-10 flex justify-center items-center rounded-full bg-teal-500 hover:bg-teal-600 text-white transition duration-300 shadow-md"
           >
             <i class="fa-solid fa-arrow-left text-lg"></i>
           </button>
           <button
+            id="cat-next"
             class="w-10 h-10 flex justify-center items-center rounded-full bg-gray-200 hover:bg-teal-500 hover:text-white text-gray-700 transition duration-300 shadow-md"
           >
             <i class="fa-solid fa-arrow-right text-lg"></i>
           </button>
         </div>
       </div>
-      <div class="overflow-x-auto">
+      <div id="category-scroll" class="overflow-x-auto scroll-smooth">
         <div
           id="category-container"
           class="grid grid-flow-col gap-6 w-max"
@@ -241,34 +240,9 @@
         Our Products
       </h2>
       <div
+        id="filter-tabs"
         class="flex justify-center space-x-6 md:space-x-10 mb-12 border-b border-gray-200"
-      >
-        <button
-          class="text-sm md:text-base font-semibold text-gray-700 border-b-2 border-teal-600 pb-2 hover:text-teal-700 transition duration-150"
-        >
-          ALL
-        </button>
-        <button
-          class="text-sm md:text-base font-semibold text-gray-700 hover:text-teal-600 border-b-2 border-transparent pb-2 transition duration-150"
-        >
-          NEWEST
-        </button>
-        <button
-          class="text-sm md:text-base font-semibold text-gray-700 hover:text-teal-600 border-b-2 border-transparent pb-2 transition duration-150"
-        >
-          TRENDING
-        </button>
-        <button
-          class="text-sm md:text-base font-semibold text-gray-700 hover:text-teal-600 border-b-2 border-transparent pb-2 transition duration-150"
-        >
-          BEST SELLERS
-        </button>
-        <button
-          class="text-sm md:text-base font-semibold text-gray-700 hover:text-teal-600 border-b-2 border-transparent pb-2 transition duration-150"
-        >
-          FEATURED
-        </button>
-      </div>
+      ></div>
       <div
         id="all-products-container"
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"

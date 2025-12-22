@@ -49,7 +49,24 @@ $(document).ready(function () {
     window.location.href = "home.html";
   });
 });
-
+$(document).ready(function () {
+  function updateCartHeaderCount() {
+    const cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    $("#cart-count").text(totalItems);
+  }
+  updateCartHeaderCount();
+  $(document).on("click", ".add-to-cart-btn", function () {
+    updateCartHeaderCount();
+  });
+});
+$(document).ready(function () {
+  function updateCartHeaderCount() {
+    const cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+    $("#cart-count").text(totalItems);
+  }
+});
 //---------------------home----------
 $(document).ready(function () {
   const isLoggedIn = sessionStorage.getItem("isLoggedIn");
@@ -60,6 +77,7 @@ $(document).ready(function () {
     !currentPage.includes("signup.html")
   ) {
     window.location.href = "signin.html";
+    return;
   }
   if (
     currentPage.includes("home.html") ||
@@ -69,62 +87,56 @@ $(document).ready(function () {
     fetch("https://fakestoreapi.com/products")
       .then((res) => res.json())
       .then((data) => {
-        renderFeatured(data.slice(0, 4));
+        renderFeatured(data.slice(0, 10));
         renderAllProducts(data.slice(4, 12));
         renderCategories(data);
+        setupHomeInteraction(data);
       });
   }
   function renderFeatured(products) {
     let html = "";
     products.forEach((item) => {
       html += `
-            <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100">
-                <div class="relative h-64 bg-gray-100/50 flex items-center justify-center p-4">
-                    <span class="absolute top-4 left-4 text-xs font-semibold px-3 py-1 rounded-full bg-green-600 text-white">Featured</span>
-                    <img src="${item.image}" class="max-h-full max-w-full object-contain">
-                </div>
-                <div class="p-4">
-                    <h3 class="text-sm font-medium text-teal-600 mb-2 truncate">${item.title}</h3>
-                    <div class="flex justify-between items-center">
-                        <p class="text-lg font-bold text-gray-900">$${item.price}</p>
-                        <button class="w-8 h-8 rounded-lg bg-teal-500 text-white"><i class="fa-solid fa-shopping-cart"></i></button>
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 w-72 flex-shrink-0">
+        <a href="product.html?id=${item.id}" class="block">
+            <div class="relative h-64 bg-gray-100/50 flex items-center justify-center p-4">
+                <span class="absolute top-4 left-4 text-xs font-semibold px-3 py-1 rounded-full bg-green-600 text-white">Featured</span>
+                <img src="${item.image}" class="max-h-full max-w-full object-contain">
+            </div>
+        </a>
+        <div class="p-4">
+            <a href="product.html?id=${item.id}">
+                <h3 class="text-sm font-medium text-teal-600 mb-2 truncate hover:underline">${item.title}</h3>
+            </a>
+                        <button class="add-to-cart-btn w-8 h-8 rounded-lg bg-teal-500 text-white" 
+                                data-id="${item.id}" data-title="${item.title}" 
+                                data-price="${item.price}" data-img="${item.image}">
+                            <i class="fa-solid fa-shopping-cart"></i>
+                        </button>
                     </div>
                 </div>
             </div>`;
     });
     $("#featured-container").html(html);
   }
-  function renderCategories(products) {
-    const categories = [...new Set(products.map((p) => p.category))];
-    let html = "";
-    categories.forEach((cat) => {
-      const sampleImg = products.find((p) => p.category === cat).image;
-      html += `
-            <a href="#" class="group w-64 md:w-72 lg:w-80 flex-shrink-0 relative rounded-xl overflow-hidden shadow-lg">
-                <img src="${sampleImg}" class="w-full h-80 object-cover transform group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-black/40"></div>
-                <div class="absolute bottom-0 left-0 p-4 text-white">
-                    <h3 class="text-xl font-semibold mb-1 capitalize">${cat}</h3>
-                    <p class="text-sm text-gray-200">View Collection</p>
-                </div>
-            </a>`;
-    });
-    $("#category-container").html(html);
-  }
   function renderAllProducts(products) {
     let html = "";
     products.forEach((item) => {
       html += `
-            <div class="product-card">
-                <div class="relative h-64 bg-gray-100/50 flex items-center justify-center p-4">
-                    <img src="${item.image}" class="max-h-full max-w-full object-contain">
-                </div>
-                <div class="p-4">
-                    <h3 class="text-sm font-medium text-gray-800 mb-2 truncate">${item.title}</h3>
-                    <div class="flex justify-between items-center">
-                        <p class="text-lg font-bold text-gray-900">$${item.price}</p>
-                        <button class="w-8 h-8 rounded-lg bg-gray-200 hover:bg-teal-500 hover:text-white transition">
-                            <i class="fa-solid fa-shopping-cart text-sm"></i>
+            <div class="product-card bg-white rounded-xl overflow-hidden shadow-lg">
+        <a href="product.html?id=${item.id}" class="block">
+            <div class="relative h-64 bg-gray-100/50 flex items-center justify-center p-4">
+                <img src="${item.image}" class="max-h-full max-w-full object-contain">
+            </div>
+        </a>
+        <div class="p-4">
+            <a href="product.html?id=${item.id}">
+                <h3 class="text-sm font-medium text-gray-800 mb-2 truncate hover:text-teal-600">${item.title}</h3>
+            </a>
+                        <button class="add-to-cart-btn w-8 h-8 rounded-lg bg-teal-500 text-white" 
+                                data-id="${item.id}" data-title="${item.title}" 
+                                data-price="${item.price}" data-img="${item.image}">
+                            <i class="fa-solid fa-shopping-cart"></i>
                         </button>
                     </div>
                 </div>
@@ -132,12 +144,105 @@ $(document).ready(function () {
     });
     $("#all-products-container").html(html);
   }
+  function renderCategories(products) {
+    const categories = [...new Set(products.map((p) => p.category))];
+    let html = categories
+      .map((cat) => {
+        const sampleImg = products.find((p) => p.category === cat).image;
+        return `
+            <a href="shop.html" class="group w-64 md:w-72 lg:w-80 flex-shrink-0 relative rounded-xl overflow-hidden shadow-lg">
+                <img src="${sampleImg}" class="w-full h-80 object-cover transform group-hover:scale-105 transition duration-500">
+                <div class="absolute inset-0 bg-black/40"></div>
+                <div class="absolute bottom-0 left-0 p-4 text-white">
+                    <h3 class="text-xl font-semibold mb-1 capitalize">${cat}</h3>
+                    <p class="text-sm text-gray-200">View Collection</p>
+                </div>
+            </a>`;
+      })
+      .join("");
+    $("#category-container").html(html);
+  }
+  $(document).on("click", ".add-to-cart-btn", function () {
+    const btn = $(this);
+    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    const newItem = {
+      id: btn.data("id"),
+      title: btn.data("title"),
+      price: parseFloat(btn.data("price")),
+      image: btn.data("image"),
+      quantity: 1,
+    };
+    const existing = cart.find((item) => item.id == newItem.id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push(newItem);
+    }
+    localStorage.setItem("myCart", JSON.stringify(cart));
+    updateCartHeaderCount();
+    alert("Added to cart!");
+  });
+  function updateCartHeaderCount() {
+    const cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    const count = cart.reduce((acc, item) => acc + item.quantity, 0);
+    $("#cart-count").text(count);
+  }
+  function setupHomeInteraction(allProducts) {
+    const categories = ["all", ...new Set(allProducts.map((p) => p.category))];
+    let tabHtml = categories
+      .map(
+        (cat) => `
+        <button class="filter-btn text-sm md:text-base font-semibold text-gray-700 border-b-2 border-transparent pb-2 hover:text-teal-600 capitalize transition duration-150" 
+                data-category="${cat}">${cat}</button>`
+      )
+      .join("");
+    $("#filter-tabs").html(tabHtml);
+    $("#filter-tabs button")
+      .first()
+      .addClass("border-teal-600 text-teal-600")
+      .removeClass("border-transparent");
+    $(document).on("click", ".filter-btn", function () {
+      const selectedCat = $(this).data("category");
+      $(".filter-btn")
+        .removeClass("border-teal-600 text-teal-600")
+        .addClass("border-transparent");
+      $(this)
+        .addClass("border-teal-600 text-teal-600")
+        .removeClass("border-transparent");
+      const filtered =
+        selectedCat === "all"
+          ? allProducts.slice(4, 12)
+          : allProducts.filter((p) => p.category === selectedCat);
+      renderAllProducts(filtered);
+    });
+    $(document).on("click", "#cat-next", () =>
+      document
+        .querySelector(".overflow-x-auto")
+        .scrollBy({ left: 300, behavior: "smooth" })
+    );
+    $(document).on("click", "#cat-prev", () =>
+      document
+        .querySelector(".overflow-x-auto")
+        .scrollBy({ left: -300, behavior: "smooth" })
+    );
+    $(document).on("click", "#feat-next", () =>
+      document
+        .getElementById("featured-container")
+        .scrollBy({ left: 300, behavior: "smooth" })
+    );
+    $(document).on("click", "#feat-prev", () =>
+      document
+        .getElementById("featured-container")
+        .scrollBy({ left: -300, behavior: "smooth" })
+    );
+  }
+  updateCartHeaderCount();
 });
 //------------shop, product, cart-------------
 $(document).ready(function () {
   let allProducts = [];
   let filteredProducts = [];
-  let itemsPerPage = 8;
+  let itemsPerPage = 16;
   let currentPage = 1;
   const isLoggedIn = sessionStorage.getItem("isLoggedIn");
   const path = window.location.pathname;
@@ -168,9 +273,10 @@ $(document).ready(function () {
     }
   }
   function renderHome(data) {
-    renderProducts(data.slice(0, 4), "#featured-container", true);
-    renderProducts(data.slice(4, 12), "#all-products-container", false);
+    renderGrid(data.slice(0, 4), "#featured-container");
+    renderGrid(data.slice(4, 12), "#all-products-container");
     renderCategories(data);
+    setupHomeInteraction(data);
   }
   function renderProducts(products, container, isFeatured) {
     let html = products
@@ -252,19 +358,33 @@ $(document).ready(function () {
     currentPage = 1;
     updateShopUI();
   }
+  $(document).on("change", "#show", function () {
+    currentPage = 1;
+    updateShopUI();
+  });
   function updateShopUI() {
-    itemsPerPage = parseInt($("#show").val()) || 8;
+    itemsPerPage = parseInt($("#show").val()) || 16;
     const start = (currentPage - 1) * itemsPerPage;
-    const paged = filteredProducts.slice(start, start + itemsPerPage);
+    const end = Math.min(start + itemsPerPage, filteredProducts.length);
+    const paged = filteredProducts.slice(start, end);
     renderShopGrid(paged);
-    renderPagination(filteredProducts.length);
-    $("#result-count").text(
-      `Showing ${filteredProducts.length > 0 ? start + 1 : 0}-${Math.min(
-        start + itemsPerPage,
+    if (typeof renderPagination === "function") {
+      renderPagination(filteredProducts.length);
+    }
+    let countText = "";
+    if (filteredProducts.length > 0) {
+      countText = `Showing ${start + 1}–${end} of ${
         filteredProducts.length
-      )} of ${filteredProducts.length} results`
-    );
+      } results`;
+    } else {
+      countText = `Showing 0 results`;
+    }
+    $("#result-count").text(countText);
   }
+  $("#shop-search, #sort, #category-filter, #show").on(
+    "change input",
+    runFiltering
+  );
   function renderShopGrid(products) {
     let html = products
       .map(
@@ -293,29 +413,38 @@ $(document).ready(function () {
     );
   }
   function setupProductDetails() {
-    const id = new URLSearchParams(window.location.search).get("id");
-    if (!id) return;
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    if (!id) {
+      console.error("No Product ID found in URL");
+      return;
+    }
     fetch(`https://fakestoreapi.com/products/${id}`)
       .then((res) => res.json())
       .then((p) => {
-        $("#p-title, #p-breadcrumb").text(p.title);
+        $("#p-title").text(p.title);
+        $("#p-breadcrumb").text(p.title);
         $("#p-price").text(`$${p.price}`);
         $("#p-desc").text(p.description);
         $("#p-cat").text(p.category);
-        $("#p-main-img, #p-detail-img-1, #p-detail-img-2").attr("src", p.image);
+        $("#p-main-img").attr("src", p.image);
+        $("#p-detail-img-1").attr("src", p.image);
+        $("#p-detail-img-2").attr("src", p.image);
         renderStars(p.rating.rate);
-        $(".bg-teal-600:contains('Add To Cart')").on("click", function () {
-          const qty = parseInt($("input[value='1']").val()) || 1;
-          addToCart(p.id, p.title, p.price, p.image, qty);
-        });
-      });
+        $("#add-to-cart-btn")
+          .off("click")
+          .on("click", function () {
+            const qty = parseInt($("#product-qty").val()) || 1;
+            addToCart(p.id, p.title, p.price, p.image, qty);
+          });
+      })
+      .catch((err) => console.error("Error loading product:", err));
   }
   function addToCart(id, title, price, image, qty = 1) {
     let cart = JSON.parse(localStorage.getItem("myCart")) || [];
     const existing = cart.find((item) => item.id == id);
     if (existing) existing.quantity += qty;
     else cart.push({ id, title, price, image, quantity: qty });
-
     localStorage.setItem("myCart", JSON.stringify(cart));
     updateCartCount();
     alert("Added to cart!");
@@ -337,42 +466,49 @@ $(document).ready(function () {
                 </div>
                 <div class="hidden sm:block text-sm">$${item.price}</div>
                 <div class="col-span-1">
-                    <input type="number" value="${
-                      item.quantity
-                    }" min="1" class="update-qty w-12 border rounded" data-index="${i}" />
+                    <input type="number" value="${item.quantity}" min="1" 
+                           class="update-qty w-12 border rounded text-center" 
+                           data-index="${i}" />
                 </div>
                 <div class="col-span-3 sm:col-span-1 flex justify-end items-center space-x-4">
                     <span class="font-semibold">$${sub.toFixed(2)}</span>
-                    <button class="delete-item text-red-500" data-index="${i}"><i class="fa-solid fa-trash-alt"></i></button>
+                    <button class="delete-item text-red-500 hover:text-red-700" data-index="${i}">
+                        <i class="fa-solid fa-trash-alt"></i>
+                    </button>
                 </div>
             </div>`;
       })
       .join("");
-    $("#cart-items-container").html(html || "Your cart is empty");
-    $(".text-gray-800:contains('Rs.'), .text-teal-600").text(
-      `$${total.toFixed(2)}`
+    $("#cart-items-container").html(
+      html || '<p class="text-center py-10">Your cart is empty</p>'
     );
+    $("#cart-subtotal, #cart-total").text(`$${total.toFixed(2)}`);
   }
-  $(document).on("click", ".add-to-cart-btn", function () {
-    const d = $(this).data();
-    addToCart(d.id, d.title, d.price, d.img);
-  });
   $(document).on("change", ".update-qty", function () {
-    let cart = JSON.parse(localStorage.getItem("myCart"));
-    cart[$(this).data("index")].quantity = parseInt($(this).val());
-    localStorage.setItem("myCart", JSON.stringify(cart));
-    renderCart();
+    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    const index = $(this).data("index");
+    const newQty = parseInt($(this).val());
+    if (newQty > 0) {
+      cart[index].quantity = newQty;
+      localStorage.setItem("myCart", JSON.stringify(cart));
+      renderCart();
+      updateCartHeaderCount();
+    }
   });
   $(document).on("click", ".delete-item", function () {
-    let cart = JSON.parse(localStorage.getItem("myCart"));
-    cart.splice($(this).data("index"), 1);
+    let cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    const itemIndex = $(this).data("index");
+    cart.splice(itemIndex, 1);
     localStorage.setItem("myCart", JSON.stringify(cart));
-    renderCart();
+    updateCartHeaderCount();
+    if (window.location.pathname.toLowerCase().includes("cart.html")) {
+      renderCart();
+    }
   });
-  function updateCartCount() {
+  function updateCartHeaderCount() {
     const cart = JSON.parse(localStorage.getItem("myCart")) || [];
     const count = cart.reduce((acc, item) => acc + item.quantity, 0);
-    $("#cart-count-badge").text(count); // Make sure your Nav has an element with this ID
+    $("#cart-count").text(count);
   }
   function renderStars(rate) {
     let stars = "";
@@ -391,74 +527,93 @@ $(document).ready(function () {
     "change input",
     runFiltering
   );
+  $(document).on("input", "#shop-search", function () {
+    const query = $(this).val().toLowerCase();
+    filteredProducts = allProducts.filter((p) =>
+      p.title.toLowerCase().includes(query)
+    );
+    currentPage = 1;
+    updateShopUI();
+  });
   $(document).on("click", ".page-btn", function () {
     currentPage = $(this).data("page");
     updateShopUI();
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 });
+//--------------checkout----------------
+function closeModal() {
+  $("#orderModal").addClass("hidden").removeClass("flex");
+}
+function finalOrderConfirm() {
+  localStorage.removeItem("myCart");
+  window.location.href = "index.html";
+}
 $(document).ready(function () {
   if (window.location.pathname.toLowerCase().includes("checkout")) {
-    console.log("Checkout logic initialized.");
     renderCheckoutSummary();
-    $(document).on("click", "#place-order-btn", function (e) {
-      e.preventDefault();
-      const cart = JSON.parse(localStorage.getItem("myCart")) || [];
-      if (cart.length === 0) {
-        alert("Your cart is empty! Please add products before checking out.");
-        return;
-      }
-      const billingData = {
-        firstName: $("#first_name").val(),
-        lastName: $("#last_name").val(),
-        email: $("#email_address").val(),
-        phone: $("#phone").val(),
-        address: $("#street_address").val(),
-        city: $("#city").val(),
-        zip: $("#zip_code").val(),
-        payment: $('input[name="payment_method"]:checked').val(),
-      };
-      if (
-        !billingData.firstName ||
-        !billingData.email ||
-        !billingData.address
-      ) {
-        alert("Please fill in all required fields (Name, Email, and Address).");
-        return;
-      }
-      $('input[name="payment_method"]').on("change", function () {
-        $(".payment-label")
-          .removeClass("text-gray-900 font-semibold")
-          .addClass("text-gray-300");
-        $(this)
-          .next("span")
-          .addClass("text-gray-900 font-semibold")
-          .removeClass("text-gray-300");
-      });
-      let itemsSummary = cart
-        .map((item) => `- ${item.title} (x${item.quantity})`)
-        .join("\n");
-      let totalAmount = cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
-      const finalMessage = `
- ORDER PLACED SUCCESSFULLY!
---- Shipping Details ---
-Name: ${billingData.firstName} ${billingData.lastName}
-Address: ${billingData.address}, ${billingData.city}
-Phone: ${billingData.phone}
---- Order Summary ---
-${itemsSummary}
-Total Amount: $${totalAmount.toFixed(2)}
-Payment Method: ${billingData.payment.toUpperCase().replace("_", " ")}
-Thank you for your purchase!
-            `;
-      alert(finalMessage);
-      localStorage.removeItem("myCart");
-      window.location.href = "home.html";
-    });
   }
+  $(document).on("click", "#place-order-btn", function (e) {
+    e.preventDefault();
+    const cart = JSON.parse(localStorage.getItem("myCart")) || [];
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+    const billingData = {
+      firstName: $("#first_name").val().trim(),
+      lastName: $("#last_name").val().trim(),
+      email: $("#email_address").val().trim(),
+      phone: $("#phone").val().trim(),
+      address: $("#street_address").val().trim(),
+      city: $("#city").val().trim(),
+      zip: $("#zip_code").val().trim(),
+      payment:
+        $('input[name="payment_method"]:checked').val() || "Not Selected",
+    };
+    if (
+      !billingData.firstName ||
+      !billingData.email ||
+      !billingData.address ||
+      !billingData.city
+    ) {
+      alert(
+        "Please fill in all required fields (Name, Email, Address, and City)."
+      );
+      return;
+    }
+    let total = 0;
+    let productsHtml = cart
+      .map((item) => {
+        const sub = item.price * item.quantity;
+        total += sub;
+        return `
+                <div class="flex justify-between text-xs border-b border-gray-100 py-1">
+                    <span>${item.title} (x${item.quantity})</span>
+                    <span class="font-bold">$${sub.toFixed(2)}</span>
+                </div>`;
+      })
+      .join("");
+    let userHtml = `
+            <div class="bg-teal-50 p-3 rounded-lg mb-4 text-sm border border-teal-100">
+                <p><strong>Customer:</strong> ${billingData.firstName} ${
+      billingData.lastName
+    }</p>
+                <p><strong>Email:</strong> ${billingData.email}</p>
+                <p><strong>Shipping:</strong> ${billingData.address}, ${
+      billingData.city
+    } (${billingData.zip})</p>
+                <p><strong>Payment:</strong> ${billingData.payment.toUpperCase()}</p>
+            </div>
+        `;
+    $("#modal-order-details").html(
+      userHtml +
+        `<p class="font-bold mb-2 uppercase text-xs text-gray-500">Items:</p>` +
+        productsHtml
+    );
+    $("#modal-total").text(`$${total.toFixed(2)}`);
+    $("#orderModal").removeClass("hidden").addClass("flex");
+  });
   function renderCheckoutSummary() {
     const cart = JSON.parse(localStorage.getItem("myCart")) || [];
     let subtotal = 0;
@@ -480,8 +635,7 @@ Thank you for your purchase!
     $("#checkout-items").html(
       html || "<p class='text-gray-400'>No items in order.</p>"
     );
-    $("#checkout-subtotal").text(`$${subtotal.toFixed(2)}`);
-    $("#checkout-total").text(`$${subtotal.toFixed(2)}`);
+    $("#checkout-subtotal, #checkout-total").text(`$${subtotal.toFixed(2)}`);
   }
 });
 //------------------- contact page ------------------

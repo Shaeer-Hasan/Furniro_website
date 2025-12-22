@@ -39,16 +39,6 @@
           >Shop</a
         >
         <a
-          href="product.html"
-          class="text-sm font-medium text-gray-700 hover:text-teal-600"
-          >Single Product</a
-        >
-        <a
-          href="Cart.html"
-          class="text-sm font-medium text-gray-700 hover:text-teal-600"
-          >Cart</a
-        >
-        <a
           href="Contact.html"
           class="text-sm font-medium text-gray-700 hover:text-teal-600"
           >Contact</a
@@ -58,9 +48,14 @@
         <div class="rounded-lg border-2 border-gray-200 bg-white p-2">
           <a href="Cart.html" class="p-3 hover:bg-gray-50/50">
             <button>
-              <div class="flex">
+              <div class="flex items-center gap-2">
                 <i class="fa-solid fa-cart-arrow-down"></i>
                 <p class="text-xs font-medium">Cart</p>
+                <span
+                  id="cart-count"
+                  class="bg-teal-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full"
+                  >0</span
+                >
               </div>
             </button>
           </a>
@@ -111,7 +106,7 @@
               <i class="fa-solid fa-table-cells-large"></i>
             </button>
             <span id="result-count" class="pl-4 border-l border-gray-200"
-              >Showing 1-16 of 32 results</span
+              >Showing 1-16 of 20 results</span
             >
           </div>
           <div class="w-full max-w-lg mx-auto">
@@ -135,17 +130,6 @@
             </form>
           </div>
           <div class="flex items-center space-x-4">
-            <div class="flex items-center space-x-2">
-              <label for="show" class="hidden sm:block">Show</label>
-              <select
-                id="show"
-                class="border border-gray-300 rounded-md text-sm p-1.5 focus:ring-teal-500 focus:border-teal-500"
-              >
-                <option>16</option>
-                <option>32</option>
-                <option>64</option>
-              </select>
-            </div>
             <div class="flex items-center space-x-2">
               <label for="category-filter" class="hidden sm:block"
                 >Sort By</label
